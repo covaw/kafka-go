@@ -13,7 +13,7 @@ import (
 
 func Producer(
 	event []byte,
-	schema string,
+	// schema string,
 	broker string,
 	topic string,
 	certificate string,
@@ -38,7 +38,7 @@ func Producer(
 	id := uuid.New()
 	uuid := strings.Replace(id.String(), "-", "", -1)
 	byteId, err := json.Marshal(uuid)
-	fmt.Println(err)
+	fmt.Println(byteId)
 
 	// var bin []byte
 	// bin = append(bin, 0)
