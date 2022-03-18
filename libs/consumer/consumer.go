@@ -7,17 +7,18 @@ import (
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/linkedin/goavro/v2"
 )
 
 func Consumer(
+	schema string,
 	broker string,
 	group string,
 	topics []string,
 	certificate string,
 	protocol string,
-	timeout int) []byte {
-
-	var result = []byte{}
+	timeout int) interface{} {
+	var result []byte
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -76,5 +77,18 @@ func Consumer(
 	fmt.Printf("Closing consumer\n")
 	c.Close()
 
-	return result
+	codec, errr := goavro.NewCodec(schema)
+
+	if errr != nil {
+		fmt.Println(errr)
+	}
+
+	decoded, _, errr := codec.NativeFromBinary(result[5:])
+	if errr != nil {
+		fmt.Println(errr)
+	}
+
+	fmt.Println(fmt.Sprintf("%s", decoded))
+
+	return decoded
 }
