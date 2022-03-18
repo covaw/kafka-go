@@ -1,14 +1,20 @@
 package producer
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/google/uuid"
+	"github.com/linkedin/goavro"
 )
 
 func Producer(
 	event []byte,
+	schema string,
 	broker string,
 	topic string,
 	certificate string,
@@ -30,9 +36,48 @@ func Producer(
 
 	deliveryChan := make(chan kafka.Event)
 
+	id := uuid.New()
+	uuid := strings.Replace(id.String(), "-", "", -1)
+	byteId, err := json.Marshal(uuid)
+	fmt.Println(byteId)
+
+	var bin []byte
+	bin = append(bin, 0)
+	bin = append(bin, 0)
+	bin = append(bin, 0)
+	bin = append(bin, 0)
+	bin = append(bin, 223)
+
+	codec, errr := goavro.NewCodec(schema)
+
+	if errr != nil {
+		fmt.Println(errr)
+	}
+
+	fmt.Println(codec)
+
+	native, _, err := codec.NativeFromTextual(event)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	binary, errr := codec.BinaryFromNative(nil, native)
+	if errr != nil {
+		fmt.Println(errr)
+	}
+
+	for index, element := range binary {
+		bin = append(bin, element)
+		fmt.Println(index)
+	}
+
 	p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
 		Value:          event,
+		Key:            byteId,
+		Timestamp:      time.Time{},
+		TimestampType:  0,
+		Opaque:         nil,
 		Headers:        []kafka.Header{{Key: "remitente", Value: []byte(remitente)}},
 	}, deliveryChan)
 
