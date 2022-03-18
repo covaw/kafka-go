@@ -39,7 +39,7 @@ func Producer(
 	id := uuid.New()
 	uuid := strings.Replace(id.String(), "-", "", -1)
 	byteId, err := json.Marshal(uuid)
-	fmt.Println(byteId)
+	fmt.Println(err)
 
 	var bin []byte
 	bin = append(bin, 0)
