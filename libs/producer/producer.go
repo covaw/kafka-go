@@ -13,7 +13,6 @@ import (
 
 func Producer(
 	event []byte,
-	// schema string,
 	broker string,
 	topic string,
 	certificate string,
