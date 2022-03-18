@@ -73,7 +73,7 @@ func Producer(
 
 	p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-		Value:          event,
+		Value:          bin,
 		Key:            byteId,
 		Timestamp:      time.Time{},
 		TimestampType:  0,
