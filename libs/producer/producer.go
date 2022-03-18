@@ -71,7 +71,8 @@ func Producer(
 		fmt.Println(index)
 	}
 
-	fmt.Println(bin)
+	fmt.Println("binary: ", binary)
+	fmt.Println("bin: ", bin)
 
 	p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
