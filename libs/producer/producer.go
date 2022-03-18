@@ -9,7 +9,6 @@ import (
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/google/uuid"
-	"github.com/linkedin/goavro"
 )
 
 func Producer(
@@ -41,42 +40,42 @@ func Producer(
 	byteId, err := json.Marshal(uuid)
 	fmt.Println(err)
 
-	var bin []byte
-	bin = append(bin, 0)
-	bin = append(bin, 0)
-	bin = append(bin, 0)
-	bin = append(bin, 0)
-	bin = append(bin, 223)
+	// var bin []byte
+	// bin = append(bin, 0)
+	// bin = append(bin, 0)
+	// bin = append(bin, 0)
+	// bin = append(bin, 0)
+	// bin = append(bin, 223)
 
-	codec, errr := goavro.NewCodec(schema)
+	// codec, errr := goavro.NewCodec(schema)
 
-	if errr != nil {
-		fmt.Println(errr)
-	}
+	// if errr != nil {
+	// 	fmt.Println(errr)
+	// }
 
-	fmt.Println(codec)
+	// fmt.Println(codec)
 
-	native, _, err := codec.NativeFromTextual(event)
-	if err != nil {
-		fmt.Println(err)
-	}
+	// native, _, err := codec.NativeFromTextual(event)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	binary, errr := codec.BinaryFromNative(nil, native)
-	if errr != nil {
-		fmt.Println(errr)
-	}
+	// binary, errr := codec.BinaryFromNative(nil, native)
+	// if errr != nil {
+	// 	fmt.Println(errr)
+	// }
 
-	for index, element := range binary {
-		bin = append(bin, element)
-		fmt.Println(index)
-	}
+	// for index, element := range binary {
+	// 	bin = append(bin, element)
+	// 	fmt.Println(index)
+	// }
 
-	fmt.Println("binary: ", binary)
-	fmt.Println("bin: ", bin)
+	// fmt.Println("binary: ", binary)
+	// fmt.Println("bin: ", bin)
 
 	p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-		Value:          bin,
+		Value:          event,
 		Key:            byteId,
 		Timestamp:      time.Time{},
 		TimestampType:  0,
