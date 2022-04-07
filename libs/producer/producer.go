@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 	"time"
 
@@ -13,14 +14,23 @@ import (
 )
 
 func Producer(
-	event []byte,
-	schema string,
+	// event []byte,
+	// schema string,
+	event interface{},
 	broker string,
 	topic string,
 	certificate string,
 	protocol string,
 	remitente string,
 ) bool {
+	types := reflect.TypeOf(event)
+	funcMarshal, _ := types.MethodByName("MarshalJSON")
+	funcSchema, _ := types.MethodByName("Schema")
+	inP := make([]reflect.Value, funcMarshal.Type.NumIn())
+	inP[0] = reflect.ValueOf(event)
+	eventBytes := funcMarshal.Func.Call(inP)[0].Interface().([]byte)
+	eventSchema := funcSchema.Func.Call(inP)[0].Interface().(string)
+
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
 		"bootstrap.servers":        broker,
 		"broker.address.family":    "v4",
@@ -41,7 +51,7 @@ func Producer(
 	byteId, err := json.Marshal(uuid)
 	fmt.Println(byteId)
 
-	codec, errr := goavro.NewCodec(schema)
+	codec, errr := goavro.NewCodec(eventSchema)
 
 	if errr != nil {
 		fmt.Println(errr)
@@ -49,7 +59,7 @@ func Producer(
 
 	fmt.Println(codec)
 
-	native, _, err := codec.NativeFromTextual(event)
+	native, _, err := codec.NativeFromTextual(eventBytes)
 	if err != nil {
 		fmt.Println(err)
 	}
