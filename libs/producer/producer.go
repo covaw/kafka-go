@@ -14,8 +14,6 @@ import (
 )
 
 func Producer(
-	// event []byte,
-	// schema string,
 	event interface{},
 	broker string,
 	topic string,
