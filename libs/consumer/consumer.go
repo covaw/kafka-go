@@ -4,20 +4,42 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"reflect"
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/linkedin/goavro/v2"
 )
 
-func Consumer(
-	schema string,
+// T can be any type
+// func Print[T string](s []T)
+// {
+//     // for _, v := range s {
+//     //     fmt.Print(v)
+//     // }
+// 	fmt.Print(s)
+// }
+// func SumIntsOrFloats[K comparable, V int64 | float64](m map[K]V) V {
+//     var s V
+//     for _, v := range m {
+//         s += v
+//     }
+//     return s
+// }
+
+func Consumer[K any](
 	broker string,
 	group string,
 	topics []string,
 	certificate string,
 	protocol string,
 	timeout int) interface{} {
+    var tt K
+	types:= reflect.TypeOf(tt)
+	funcSchema, _ := types.MethodByName("Schema")
+	inP := make([]reflect.Value, funcSchema.Type.NumIn())
+	inP[0] = reflect.ValueOf(tt)
+	eventSchema := funcSchema.Func.Call(inP)[0].Interface().(string)
 	var result []byte
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
@@ -77,7 +99,7 @@ func Consumer(
 	fmt.Printf("Closing consumer\n")
 	c.Close()
 
-	codec, errr := goavro.NewCodec(schema)
+	codec, errr := goavro.NewCodec(eventSchema)
 
 	if errr != nil {
 		fmt.Println(errr)
