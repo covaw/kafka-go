@@ -1,4 +1,4 @@
-module main.go
+module github.com/covaw/kafka-go
 
 go 1.17
 
