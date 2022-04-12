@@ -11,11 +11,11 @@ import (
 	"github.com/linkedin/goavro/v2"
 )
 
-type KafkaOptions[K any] struct {
-	cfg *kafka.ConfigMap
-}
+// type KafkaOptions[K any] struct {
+// 	cfg *kafka.ConfigMap
+// }
 
-func (k *KafkaOptions[K]) Consumer(topics []string) interface{} {
+func (k *KafkaOption[K]) Consumer(topics []string) interface{} {
 	// broker string,
 	// group string,
 	// topics []string)
