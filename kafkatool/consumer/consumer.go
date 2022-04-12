@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	variables "github.com/covaw/kafka-go/kafkatool/main"
+	variables "github.com/covaw/kafka-go/kafkatool/variables"
 	"github.com/linkedin/goavro/v2"
 )
 

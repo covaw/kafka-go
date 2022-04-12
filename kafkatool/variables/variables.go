@@ -1,4 +1,4 @@
-package main
+package variables
 
 import "github.com/confluentinc/confluent-kafka-go/kafka"
 
