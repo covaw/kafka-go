@@ -1,6 +1,10 @@
 package variables
 
-import "github.com/confluentinc/confluent-kafka-go/kafka"
+import (
+	"fmt"
+
+	"github.com/confluentinc/confluent-kafka-go/kafka"
+)
 
 var (
 	_config *kafka.ConfigMap
@@ -12,4 +16,5 @@ func GetConfig() *kafka.ConfigMap {
 
 func SetConfig(config *kafka.ConfigMap) {
 	_config := config
+	fmt.Println(_config)
 }
