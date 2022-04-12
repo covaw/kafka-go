@@ -39,7 +39,7 @@ func Consumer[K any](
 	// 	"auto.offset.reset":        "earliest",
 	// 	"ssl.certificate.location": certificate})
 	fmt.Println(variables.GetConfig())
-	// router :=  mux.NewRouter().StrictSlash(true)
+
 	c, err := kafka.NewConsumer(variables.GetConfig())
 
 	if err != nil {
