@@ -11,13 +11,17 @@ import (
 	"github.com/linkedin/goavro/v2"
 )
 
-func (k *KafkaOption) Consumer[K any](
-	broker string,
-	group string,
-	topics []string,
-	certificate string,
-	protocol string,
-	timeout int) interface{} {
+type KafkaOptions[K any] struct {
+	cfg *kafka.ConfigMap
+}
+
+func (k *KafkaOptions[K]) Consumer(topics []string) interface{} {
+	// broker string,
+	// group string,
+	// topics []string)
+	// certificate string,
+	// protocol string,
+	// timeout int) 
     var eventType K
 	typeOfEvent := reflect.TypeOf(eventType)
 	funcSchema, _ := typeOfEvent.MethodByName("Schema")
@@ -37,6 +41,9 @@ func (k *KafkaOption) Consumer[K any](
 	// 	"security.protocol":        protocol,
 	// 	"auto.offset.reset":        "earliest",
 	// 	"ssl.certificate.location": certificate})
+	
+	// mapstructure.Decode(result, &event)
+
 	fmt.Println(k.cfg)
 
 	c, err := kafka.NewConsumer(k.cfg)
@@ -58,7 +65,8 @@ func (k *KafkaOption) Consumer[K any](
 			fmt.Printf("Caught signal %v: terminating\n", sig)
 			run = false
 		default:
-			ev := c.Poll(timeout)
+			// ev := c.Poll(timeout)
+			ev := c.Poll(6000)
 			if ev == nil {
 				continue
 			}
