@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	variables "github.com/covaw/kafka-go/kafkatool/variables"
+	"github.com/covaw/kafka-go/kafkatool/variables"
 	"github.com/mitchellh/mapstructure"
 )
 
