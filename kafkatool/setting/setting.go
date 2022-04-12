@@ -3,8 +3,8 @@ package setting
 import (
 	"fmt"
 
+	variables "./main"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	kafkatool "github.com/covaw/kafka-go/kafkatool"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -25,5 +25,5 @@ func AddKafka(configuration map[string]interface{}, provider string) {
 		"auto.offset.reset":        "earliest",
 		"ssl.certificate.location": configurations["certificate"]}
 
-	kafkatool.SetConfig(kafkaConfig)
+	variables.SetConfig(kafkaConfig)
 }
