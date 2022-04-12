@@ -4,8 +4,11 @@ import (
 	"fmt"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/covaw/kafka-go/kafkatool/variables"
 	"github.com/mitchellh/mapstructure"
+)
+
+var (
+	_config *kafka.ConfigMap
 )
 
 func AddKafka(configuration map[string]interface{}, provider string) {
@@ -25,5 +28,11 @@ func AddKafka(configuration map[string]interface{}, provider string) {
 		"auto.offset.reset":        "earliest",
 		"ssl.certificate.location": configurations["certificate"]}
 	fmt.Println(kafkaConfig)
-	variables.SetConfig(kafkaConfig)
+	_config := kafkaConfig
+
+	fmt.Println("Kafka-Config:", _config)
+}
+
+func GetConfig() *kafka.ConfigMap {
+	return _config
 }
