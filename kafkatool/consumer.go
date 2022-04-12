@@ -11,7 +11,7 @@ import (
 	"github.com/linkedin/goavro/v2"
 )
 
-func (k *kafkatool) Consumer[K any](
+func (k *KafkaOption) Consumer[K any](
 	broker string,
 	group string,
 	topics []string,
