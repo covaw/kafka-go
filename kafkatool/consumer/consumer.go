@@ -1,4 +1,4 @@
-package producer
+package consumer
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"syscall"
 
-	variables "./main"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	variables "github.com/covaw/kafka-go/kafkatool/main"
 	"github.com/linkedin/goavro/v2"
 )
 

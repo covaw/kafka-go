@@ -3,8 +3,8 @@ package setting
 import (
 	"fmt"
 
-	variables "./main"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	variables "github.com/covaw/kafka-go/kafkatool/main"
 	"github.com/mitchellh/mapstructure"
 )
 
