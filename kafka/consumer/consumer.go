@@ -1,4 +1,4 @@
-package consumer
+package kafkaTool
 
 import (
 	"fmt"
@@ -8,24 +8,9 @@ import (
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	kafkaTool "github.com/covaw/kafka-go/kafka"
 	"github.com/linkedin/goavro/v2"
 )
-
-// T can be any type
-// func Print[T string](s []T)
-// {
-//     // for _, v := range s {
-//     //     fmt.Print(v)
-//     // }
-// 	fmt.Print(s)
-// }
-// func SumIntsOrFloats[K comparable, V int64 | float64](m map[K]V) V {
-//     var s V
-//     for _, v := range m {
-//         s += v
-//     }
-//     return s
-// }
 
 func Consumer[K any](
 	broker string,
@@ -34,24 +19,28 @@ func Consumer[K any](
 	certificate string,
 	protocol string,
 	timeout int) interface{} {
-    var tt K
-	types:= reflect.TypeOf(tt)
-	funcSchema, _ := types.MethodByName("Schema")
+    var eventType K
+	typeOfEvent := reflect.TypeOf(eventType)
+	funcSchema, _ := typeOfEvent.MethodByName("Schema")
 	inP := make([]reflect.Value, funcSchema.Type.NumIn())
-	inP[0] = reflect.ValueOf(tt)
+	inP[0] = reflect.ValueOf(eventType)
 	eventSchema := funcSchema.Func.Call(inP)[0].Interface().(string)
+
 	var result []byte
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers":        broker,
-		"broker.address.family":    "v4",
-		"group.id":                 group,
-		"session.timeout.ms":       6000,
-		"security.protocol":        protocol,
-		"auto.offset.reset":        "earliest",
-		"ssl.certificate.location": certificate})
+	// c, err := kafka.NewConsumer(&kafka.ConfigMap{
+	// 	"bootstrap.servers":        broker,
+	// 	"broker.address.family":    "v4",
+	// 	"group.id":                 group,
+	// 	"session.timeout.ms":       6000,
+	// 	"security.protocol":        protocol,
+	// 	"auto.offset.reset":        "earliest",
+	// 	"ssl.certificate.location": certificate})
+
+	// router :=  mux.NewRouter().StrictSlash(true)
+	c, err := kafka.NewConsumer(kafkaTool.GetConfig())
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create consumer: %s\n", err)
