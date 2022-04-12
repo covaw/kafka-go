@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	// "github.com/covaw/kafka-go/kafkatool/variables"
+	"github.com/covaw/kafka-go/kafkatool/variables"
 	"github.com/linkedin/goavro/v2"
 )
 
@@ -30,17 +30,17 @@ func Consumer[K any](
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers":        broker,
-		"broker.address.family":    "v4",
-		"group.id":                 group,
-		"session.timeout.ms":       6000,
-		"security.protocol":        protocol,
-		"auto.offset.reset":        "earliest",
-		"ssl.certificate.location": certificate})
-	// fmt.Println(variables.GetConfig())
+	// c, err := kafka.NewConsumer(&kafka.ConfigMap{
+	// 	"bootstrap.servers":        broker,
+	// 	"broker.address.family":    "v4",
+	// 	"group.id":                 group,
+	// 	"session.timeout.ms":       6000,
+	// 	"security.protocol":        protocol,
+	// 	"auto.offset.reset":        "earliest",
+	// 	"ssl.certificate.location": certificate})
+	fmt.Println(variables.GetConfig())
 	// router :=  mux.NewRouter().StrictSlash(true)
-	// c, err := kafka.NewConsumer(variables.GetConfig())
+	c, err := kafka.NewConsumer(variables.GetConfig())
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create consumer: %s\n", err)
