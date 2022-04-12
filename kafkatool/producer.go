@@ -1,4 +1,4 @@
-package kafkaTool
+package kafkatool
 
 import (
 	"encoding/json"

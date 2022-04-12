@@ -1,4 +1,4 @@
-package kafkaTool
+package kafkatool
 
 import "github.com/confluentinc/confluent-kafka-go/kafka"
 
