@@ -8,7 +8,6 @@ import (
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	kafkatool "github.com/covaw/kafka-go/kafkatool/setting"
 	"github.com/linkedin/goavro/v2"
 )
 
@@ -38,9 +37,9 @@ func Consumer[K any](
 	// 	"security.protocol":        protocol,
 	// 	"auto.offset.reset":        "earliest",
 	// 	"ssl.certificate.location": certificate})
-	fmt.Println(kafkatool.GetConfig())
+	fmt.Println(GetConfig())
 
-	c, err := kafka.NewConsumer(kafkatool.GetConfig())
+	c, err := kafka.NewConsumer(GetConfig())
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create consumer: %s\n", err)
