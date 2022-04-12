@@ -1,4 +1,4 @@
-package kafkatool
+package consumer
 
 import (
 	"encoding/json"

@@ -1,4 +1,4 @@
-package kafkatool
+package setting
 
 import (
 	"fmt"
