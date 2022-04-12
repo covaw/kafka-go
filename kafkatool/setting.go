@@ -7,11 +7,11 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-type kafkatool struct {
+type KafkaOption struct {
 	cfg *kafka.ConfigMap
 }
 
-func (k *kafkatool) AddKafka(configuration map[string]interface{}, provider string) {
+func (k *KafkaOption) AddKafka(configuration map[string]interface{}, provider string) {
 	if len(provider) == 0 {
 		provider := "Kafka"
 		fmt.Println(provider)
@@ -33,6 +33,6 @@ func (k *kafkatool) AddKafka(configuration map[string]interface{}, provider stri
 	fmt.Println("Kafka-Config:", k.cfg)
 }
 
-func (k *kafkatool) GetConfig() *kafka.ConfigMap {
+func (k *KafkaOption) GetConfig() *kafka.ConfigMap {
 	return k.cfg
 }
