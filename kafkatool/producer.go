@@ -5,21 +5,19 @@ import (
 	"fmt"
 	"os"
 	"reflect"
-	"strings"
 	"time"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/google/uuid"
 	"github.com/linkedin/goavro/v2"
 )
 
 func (k *Config[K]) Producer(
 	event interface{},
 	// broker string,
-	topic string,
+	key string,
 	// certificate string,
 	// protocol string,
-	remitente string,
+	topic string,
 ) bool {
 	types := reflect.TypeOf(event)
 	funcMarshal, _ := types.MethodByName("MarshalJSON")
@@ -45,9 +43,10 @@ func (k *Config[K]) Producer(
 
 	deliveryChan := make(chan kafka.Event)
 
-	id := uuid.New()
-	uuid := strings.Replace(id.String(), "-", "", -1)
-	byteId, err := json.Marshal(uuid)
+	//Generate Guid identity
+	// id := uuid.New()
+	// uuid := strings.Replace(id.String(), "-", "", -1)
+	byteId, err := json.Marshal(key)
 	fmt.Println(byteId)
 
 	codec, errr := goavro.NewCodec(eventSchema)
@@ -89,7 +88,7 @@ func (k *Config[K]) Producer(
 		Timestamp:      time.Time{},
 		TimestampType:  0,
 		Opaque:         nil,
-		Headers:        []kafka.Header{{Key: "remitente", Value: []byte(remitente)}},
+		Headers:        []kafka.Header{{Key: "remitente", Value: []byte(k.sender)}},
 	}, deliveryChan)
 
 	e := <-deliveryChan
