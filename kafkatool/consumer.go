@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"reflect"
+	"strconv"
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
@@ -70,7 +71,8 @@ func (k *KafkaOption[K]) Consumer(topic string) K {
 			run = false
 		default:
 			// ev := c.Poll(timeout)
-			ev := c.Poll(k.cfg["session.timeout.ms"])
+			timeout, err := strconv.Atoi(k.cfg["session.timeout.ms"])
+			ev := c.Poll(timeout)
 			if ev == nil {
 				continue
 			}
@@ -114,6 +116,6 @@ func (k *KafkaOption[K]) Consumer(topic string) K {
 
 	var eventValue K
 	mapstructure.Decode(decoded, &eventValue)
-	
+
 	return eventValue
 }
