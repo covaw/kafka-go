@@ -12,17 +12,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-// type KafkaOptions[K any] struct {
-// 	cfg *kafka.ConfigMap
-// }
-
-func (k *KafkaOption[K]) Consumer(topic string) K {
-	// broker string,
-	// group string,
-	// topics []string)
-	// certificate string,
-	// protocol string,
-	// timeout int) 
+func (k *Config[K]) Consumer(topic string) K {
     var eventType K
 	typeOfEvent := reflect.TypeOf(eventType)
 	funcSchema, _ := typeOfEvent.MethodByName("Schema")
@@ -33,17 +23,6 @@ func (k *KafkaOption[K]) Consumer(topic string) K {
 	var result []byte
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
-
-	// c, err := kafka.NewConsumer(&kafka.ConfigMap{
-	// 	"bootstrap.servers":        broker,
-	// 	"broker.address.family":    "v4",
-	// 	"group.id":                 group,
-	// 	"session.timeout.ms":       6000,
-	// 	"security.protocol":        protocol,
-	// 	"auto.offset.reset":        "earliest",
-	// 	"ssl.certificate.location": certificate})
-	
-	// mapstructure.Decode(result, &event)
 
 	fmt.Println(k.cfg)
 
