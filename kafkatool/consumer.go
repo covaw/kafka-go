@@ -9,13 +9,14 @@ import (
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/linkedin/goavro/v2"
+	"github.com/mitchellh/mapstructure"
 )
 
 // type KafkaOptions[K any] struct {
 // 	cfg *kafka.ConfigMap
 // }
 
-func (k *KafkaOption[K]) Consumer(topics []string) interface{} {
+func (k *KafkaOption[K]) Consumer(topic string) K {
 	// broker string,
 	// group string,
 	// topics []string)
@@ -55,6 +56,9 @@ func (k *KafkaOption[K]) Consumer(topics []string) interface{} {
 
 	fmt.Printf("Created Consumer %v\n", c)
 
+	var topics []string
+	topics = append(topics, topic)
+
 	err = c.SubscribeTopics(topics, nil)
 
 	run := true
@@ -66,7 +70,7 @@ func (k *KafkaOption[K]) Consumer(topics []string) interface{} {
 			run = false
 		default:
 			// ev := c.Poll(timeout)
-			ev := c.Poll(6000)
+			ev := c.Poll(k.cfg["session.timeout.ms"])
 			if ev == nil {
 				continue
 			}
@@ -108,5 +112,8 @@ func (k *KafkaOption[K]) Consumer(topics []string) interface{} {
 
 	fmt.Println(fmt.Sprintf("%s", decoded))
 
-	return decoded
+	var eventValue K
+	mapstructure.Decode(decoded, &eventValue)
+	
+	return eventValue
 }
