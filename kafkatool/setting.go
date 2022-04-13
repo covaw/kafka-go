@@ -9,6 +9,7 @@ import (
 
 type Config[K any] struct {
 	cfg *kafka.ConfigMap
+	sender string
 }
 
 func (k *Config[K]) AddKafka(configuration map[string]interface{}, provider string) {
@@ -29,6 +30,7 @@ func (k *Config[K]) AddKafka(configuration map[string]interface{}, provider stri
 		"ssl.certificate.location": configurations["certificate"]}
 	fmt.Println(kafkaConfig)
 	k.cfg = kafkaConfig
+	k.sender = configurations["applicationName"]
 
 	fmt.Println("Kafka-Config:", k.cfg)
 }

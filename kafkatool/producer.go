@@ -13,12 +13,12 @@ import (
 	"github.com/linkedin/goavro/v2"
 )
 
-func Producer(
+func (k *Config[K]) Producer(
 	event interface{},
-	broker string,
+	// broker string,
 	topic string,
-	certificate string,
-	protocol string,
+	// certificate string,
+	// protocol string,
 	remitente string,
 ) bool {
 	types := reflect.TypeOf(event)
@@ -29,11 +29,12 @@ func Producer(
 	eventBytes := funcMarshal.Func.Call(inP)[0].Interface().([]byte)
 	eventSchema := funcSchema.Func.Call(inP)[0].Interface().(string)
 
-	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers":        broker,
-		"broker.address.family":    "v4",
-		"security.protocol":        protocol,
-		"ssl.certificate.location": certificate})
+	// p, err := kafka.NewProducer(&kafka.ConfigMap{
+	// 	"bootstrap.servers":        broker,
+	// 	"broker.address.family":    "v4",
+	// 	"security.protocol":        protocol,
+	// 	"ssl.certificate.location": certificate})
+	p, err := kafka.NewProducer(k.cfg)
 
 	if err != nil {
 		fmt.Printf("Failed to create producer: %s\n", err)
