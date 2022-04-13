@@ -49,6 +49,8 @@ func (k *KafkaOption[K]) Consumer(topic string) K {
 	fmt.Println(k.cfg)
 
 	c, err := kafka.NewConsumer(k.cfg)
+	var configKafka map[string]string
+	mapstructure.Decode(k.cfg, &configKafka)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create consumer: %s\n", err)
@@ -71,7 +73,7 @@ func (k *KafkaOption[K]) Consumer(topic string) K {
 			run = false
 		default:
 			// ev := c.Poll(timeout)
-			timeout, err := strconv.Atoi(k.cfg["session.timeout.ms"])
+			timeout, err := strconv.Atoi(configKafka["session.timeout.ms"])
 			ev := c.Poll(timeout)
 			if ev == nil {
 				continue
