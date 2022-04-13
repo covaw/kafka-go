@@ -74,6 +74,9 @@ func (k *KafkaOption[K]) Consumer(topic string) K {
 		default:
 			// ev := c.Poll(timeout)
 			timeout, err := strconv.Atoi(configKafka["session.timeout.ms"])
+			if err != nil {
+				fmt.Println(err)
+			}
 			ev := c.Poll(timeout)
 			if ev == nil {
 				continue
