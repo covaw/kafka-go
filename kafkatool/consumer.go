@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/signal"
 	"reflect"
-	"strconv"
 	"syscall"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
@@ -72,12 +71,7 @@ func (k *KafkaOption[K]) Consumer(topic string) K {
 			fmt.Printf("Caught signal %v: terminating\n", sig)
 			run = false
 		default:
-			// ev := c.Poll(timeout)
-			timeout, err := strconv.Atoi(configKafka["session.timeout.ms"])
-			if err != nil {
-				fmt.Println(err)
-			}
-			ev := c.Poll(timeout)
+			ev := c.Poll(30)
 			if ev == nil {
 				continue
 			}
